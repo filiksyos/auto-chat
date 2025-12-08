@@ -69,17 +69,14 @@ textInput.addEventListener('keydown', async (e) => {
         routingStatus.textContent = `✓ Routed to ${result.service}: ${result.reason}`;
         routingStatus.className = 'routing-status routed';
         
-        // Wait a bit for service to load, then submit
-        setTimeout(async () => {
-          await window.electronAPI.submitMessage();
-          textInput.value = '';
-          
-          // Reset status after a delay
-          setTimeout(() => {
-            routingStatus.textContent = '🤖 Auto-routing enabled';
-            routingStatus.className = 'routing-status';
-          }, 2000);
-        }, 1000);
+        // Clear input immediately - message is being sent automatically by main process
+        textInput.value = '';
+        
+        // Reset status after a delay
+        setTimeout(() => {
+          routingStatus.textContent = '🤖 Auto-routing enabled';
+          routingStatus.className = 'routing-status';
+        }, 2000);
       } else {
         routingStatus.textContent = `❌ Error: ${result.error}`;
         routingStatus.className = 'routing-status';
