@@ -1,0 +1,39 @@
+{
+  "name": "auto-chat",
+  "version": "1.0.0",
+  "description": "Intelligent AI router that automatically selects the best chatbot based on your request",
+  "author": "Auto Chat",
+  "main": "src/main/index.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.autochat.app",
+    "productName": "AutoChat",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": ["dmg"]
+    },
+    "win": {
+      "target": ["nsis"]
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "Utility"
+    }
+  }
+}
