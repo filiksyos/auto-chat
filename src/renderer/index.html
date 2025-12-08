@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auto Chat Control Bar</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="service-selector">
+      <button class="service-btn active" data-service="chatgpt" title="ChatGPT - General Q&A & Facts">💬 ChatGPT</button>
+      <button class="service-btn" data-service="claude" title="Claude - Creative & Analysis">🎭 Claude</button>
+      <button class="service-btn" data-service="gemini" title="Gemini - Images & Multimodal">✨ Gemini</button>
+      <button class="service-btn" data-service="perplexity" title="Perplexity - Web Search">🔍 Perplexity</button>
+    </div>
+    
+    <div class="input-wrapper">
+      <textarea
+        id="textInput"
+        class="text-input"
+        placeholder="Type your message... Auto Chat will intelligently route it to the best AI service!"
+        spellcheck="true"
+      ></textarea>
+      <div class="input-info">
+        <div class="routing-info">
+          <span id="routingStatus" class="routing-status">🤖 Auto-routing enabled</span>
+        </div>
+        <span class="shortcuts"><kbd>Enter</kbd> to submit | <kbd>Shift+Enter</kbd> for new line</span>
+        <div class="button-group">
+          <button id="newChatBtn" class="action-btn" title="Start new chat">✨ New Chat</button>
+          <button id="refreshBtn" class="action-btn" title="Refresh page">🔄 Refresh</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
