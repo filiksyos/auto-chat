@@ -2,10 +2,22 @@ const { BrowserWindow, BrowserView } = require('electron');
 const path = require('path');
 
 const SERVICES = {
-  chatgpt: 'https://chat.openai.com',
-  claude: 'https://claude.ai',
-  gemini: 'https://gemini.google.com',
-  perplexity: 'https://www.perplexity.ai'
+  chatgpt: {
+    url: 'https://chat.openai.com',
+    preload: 'chatgpt-preload.js'
+  },
+  claude: {
+    url: 'https://claude.ai',
+    preload: 'claude-preload.js'
+  },
+  gemini: {
+    url: 'https://gemini.google.com',
+    preload: 'gemini-preload.js'
+  },
+  perplexity: {
+    url: 'https://www.perplexity.ai',
+    preload: 'perplexity-preload.js'
+  }
 };
 
 const CONTROL_BAR_HEIGHT = 120;
@@ -46,11 +58,16 @@ async function createWindow() {
   // Create chat view (starts with ChatGPT)
   const chatView = new BrowserView({
     webPreferences: {
-      preload: path.join(__dirname, '../preload/preload.js'),
+      preload: path.join(__dirname, '../preload/', SERVICES.chatgpt.preload),
       contextIsolation: true,
       nodeIntegration: false,
       partition: 'persist:chatgpt'
     }
+  });
+
+  // Forward console messages from BrowserView to main process
+  chatView.webContents.on('console-message', (event, level, message, line, sourceId) => {
+    console.log(`[CHATGPT] ${message}`);
   });
 
   mainWindow.addBrowserView(chatView);
@@ -61,7 +78,7 @@ async function createWindow() {
     height: bounds.height - CONTROL_BAR_HEIGHT
   });
   chatView.setAutoResize({ width: true, height: true });
-  chatView.webContents.loadURL(SERVICES.chatgpt);
+  chatView.webContents.loadURL(SERVICES.chatgpt.url);
 
   mainWindow.chatView = chatView;
   mainWindow.controlView = controlView;
@@ -89,7 +106,7 @@ async function createWindow() {
 function switchService(mainWindow, service) {
   if (!SERVICES[service]) {
     console.error('Unknown service:', service);
-    return;
+    return Promise.reject(new Error(`Unknown service: ${service}`));
   }
 
   const bounds = mainWindow.getContentBounds();
@@ -100,14 +117,19 @@ function switchService(mainWindow, service) {
     mainWindow.chatView.webContents.destroy();
   }
 
-  // Create new chat view with appropriate partition
+  // Create new chat view with appropriate partition and preload script
   const chatView = new BrowserView({
     webPreferences: {
-      preload: path.join(__dirname, '../preload/preload.js'),
+      preload: path.join(__dirname, '../preload/', SERVICES[service].preload),
       contextIsolation: true,
       nodeIntegration: false,
       partition: `persist:${service}`
     }
+  });
+
+  // Forward console messages from BrowserView to main process
+  chatView.webContents.on('console-message', (event, level, message, line, sourceId) => {
+    console.log(`[${service.toUpperCase()}] ${message}`);
   });
 
   mainWindow.addBrowserView(chatView);
@@ -118,14 +140,36 @@ function switchService(mainWindow, service) {
     height: bounds.height - CONTROL_BAR_HEIGHT
   });
   chatView.setAutoResize({ width: true, height: true });
-  chatView.webContents.loadURL(SERVICES[service]);
-
-  mainWindow.chatView = chatView;
-
-  // Notify control view of service change
-  if (mainWindow.controlView && mainWindow.controlView.webContents) {
-    mainWindow.controlView.webContents.send('service-changed', service);
-  }
+  
+  // Return a promise that resolves when the page finishes loading
+  return new Promise((resolve) => {
+    console.log(`[WindowManager] Loading ${service} at ${SERVICES[service].url}`);
+    
+    // Set up the chatView reference immediately so IPC can work
+    mainWindow.chatView = chatView;
+    
+    // Listen for when the page finishes loading
+    const onDidFinishLoad = () => {
+      console.log(`[WindowManager] ${service} page finished loading`);
+      // Wait for React/SPA to initialize
+      setTimeout(() => {
+        // Notify control view of service change
+        if (mainWindow.controlView && mainWindow.controlView.webContents) {
+          mainWindow.controlView.webContents.send('service-changed', service);
+        }
+        resolve();
+      }, 1000);
+    };
+    
+    chatView.webContents.once('did-finish-load', onDidFinishLoad);
+    
+    // Also listen for DOM ready in case did-finish-load fires too early
+    chatView.webContents.once('dom-ready', () => {
+      console.log(`[WindowManager] ${service} DOM ready`);
+    });
+    
+    chatView.webContents.loadURL(SERVICES[service].url);
+  });
 }
 
 module.exports = {
