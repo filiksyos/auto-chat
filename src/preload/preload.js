@@ -47,7 +47,37 @@ contextBridge.exposeInMainWorld('electronAPI', {
   
   // Reset system prompt to default
   resetSystemPrompt: () => ipcRenderer.invoke('reset-system-prompt'),
-  
+
   // Show/hide chat view (for modal overlay)
-  setChatViewVisible: (visible) => ipcRenderer.invoke('set-chat-view-visible', visible)
+  setChatViewVisible: (visible) => ipcRenderer.invoke('set-chat-view-visible', visible),
+
+  // API Key Management
+  saveApiKey: (apiKey) => ipcRenderer.invoke('save-api-key', apiKey),
+  getApiKey: () => ipcRenderer.invoke('get-api-key'),
+  checkApiKey: () => ipcRenderer.invoke('check-api-key'),
+  deleteApiKey: () => ipcRenderer.invoke('delete-api-key'),
+
+  // Loading Page Management
+  showLoadingPage: (routingReason) => ipcRenderer.invoke('show-loading-page', routingReason),
+  hideLoadingPage: () => ipcRenderer.invoke('hide-loading-page'),
+  updateLoadingReason: (reason) => ipcRenderer.invoke('update-loading-reason', reason),
+  updateLoadingProgress: (message) => ipcRenderer.invoke('update-loading-progress', message),
+  showAuthSuggestion: (visible) => ipcRenderer.invoke('show-auth-suggestion', visible),
+
+  // Show landing page
+  showLandingPage: () => ipcRenderer.invoke('show-landing-page'),
+
+  // Loading Page Event Listeners
+  onUpdateLoadingReason: (callback) => {
+    ipcRenderer.on('update-loading-reason', (event, reason) => callback(reason));
+  },
+  onUpdateLoadingProgress: (callback) => {
+    ipcRenderer.on('update-loading-progress', (event, message) => callback(message));
+  },
+  onShowAuthSuggestion: (callback) => {
+    ipcRenderer.on('show-auth-suggestion', (event, visible) => callback(visible));
+  },
+
+  // Notify main process when input is ready
+  notifyInputReady: () => ipcRenderer.send('input-ready')
 });

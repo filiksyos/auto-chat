@@ -37,10 +37,9 @@ serviceBtns.forEach(btn => {
   btn.addEventListener('click', async () => {
     const service = btn.dataset.service;
     if (service && service !== currentService) {
-      const result = await window.electronAPI.changeService(service);
-      if (result.success) {
-        updateActiveService(service);
-      }
+      // Set preferred service and show landing page
+      await window.electronAPI.changeService(service);
+      await window.electronAPI.showLandingPage();
     }
   });
 });
@@ -128,6 +127,8 @@ async function openSettingsModal() {
   await window.electronAPI.setChatViewVisible(false);
   settingsModal.classList.add('show');
   await loadPromptIntoModal();
+  await updateApiKeyStatus();
+  updateApiKeyCharCount();
   promptTextarea.focus();
 }
 
@@ -137,6 +138,11 @@ async function closeSettingsModal() {
   promptTextarea.value = '';
   modalMessage.classList.remove('show');
   originalPrompt = '';
+  // Clear API key input and reset visibility
+  apiKeyInput.value = '';
+  isApiKeyVisible = false;
+  apiKeyInput.type = 'password';
+  toggleVisibilityBtn.textContent = '👁 Show';
   // Show the chat view again
   await window.electronAPI.setChatViewVisible(true);
 }
@@ -229,4 +235,132 @@ resetPromptBtn.addEventListener('click', () => {
 // Update character count on input
 promptTextarea.addEventListener('input', () => {
   updateCharCount();
+});
+
+// ============================================
+// API Key Management
+// ============================================
+
+// API Key elements
+const apiKeyInput = document.getElementById('apiKeyInput');
+const saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
+const deleteApiKeyBtn = document.getElementById('deleteApiKeyBtn');
+const toggleVisibilityBtn = document.getElementById('toggleVisibilityBtn');
+const apiKeyStatus = document.getElementById('apiKeyStatus');
+const apiKeyCharCount = document.getElementById('apiKeyCharCount');
+
+// API Key state
+let isApiKeyVisible = false;
+
+// Update API key character count
+function updateApiKeyCharCount() {
+  const count = apiKeyInput.value.length;
+  apiKeyCharCount.textContent = `${count.toLocaleString()} characters`;
+}
+
+// Update API key status display
+async function updateApiKeyStatus() {
+  try {
+    const { exists } = await window.electronAPI.checkApiKey();
+    if (exists) {
+      apiKeyStatus.textContent = '✓ API Key Configured';
+      apiKeyStatus.classList.remove('missing');
+      apiKeyStatus.classList.add('configured');
+      deleteApiKeyBtn.disabled = false;
+    } else {
+      apiKeyStatus.textContent = '⚠ No API Key';
+      apiKeyStatus.classList.remove('configured');
+      apiKeyStatus.classList.add('missing');
+      deleteApiKeyBtn.disabled = true;
+    }
+  } catch (error) {
+    console.error('Error checking API key status:', error);
+    apiKeyStatus.textContent = '❌ Error checking status';
+    apiKeyStatus.classList.remove('configured');
+    apiKeyStatus.classList.add('missing');
+  }
+}
+
+// Toggle API key visibility
+function toggleApiKeyVisibility() {
+  isApiKeyVisible = !isApiKeyVisible;
+  if (isApiKeyVisible) {
+    apiKeyInput.type = 'text';
+    toggleVisibilityBtn.textContent = '🙈 Hide';
+  } else {
+    apiKeyInput.type = 'password';
+    toggleVisibilityBtn.textContent = '👁 Show';
+  }
+}
+
+// Save API key
+async function saveApiKey() {
+  const apiKey = apiKeyInput.value.trim();
+
+  // Validate: empty check
+  if (apiKey.length === 0) {
+    showModalMessage('API key cannot be empty', 'error');
+    return;
+  }
+
+  // Validate: should start with "sk-"
+  if (!apiKey.startsWith('sk-')) {
+    showModalMessage('API key should start with "sk-"', 'error');
+    return;
+  }
+
+  try {
+    const result = await window.electronAPI.saveApiKey(apiKey);
+    if (result.success) {
+      showModalMessage('API key saved securely!', 'success');
+      apiKeyInput.value = '';
+      await updateApiKeyStatus();
+      isApiKeyVisible = false;
+      apiKeyInput.type = 'password';
+      toggleVisibilityBtn.textContent = '👁 Show';
+      updateApiKeyCharCount();
+    } else {
+      showModalMessage(`Error saving API key: ${result.error}`, 'error');
+    }
+  } catch (error) {
+    showModalMessage(`Error saving API key: ${error.message}`, 'error');
+  }
+}
+
+// Delete API key
+async function deleteApiKey() {
+  if (!confirm('Are you sure you want to delete the stored API key?')) {
+    return;
+  }
+
+  try {
+    const result = await window.electronAPI.deleteApiKey();
+    if (result.success) {
+      showModalMessage('API key deleted', 'success');
+      apiKeyInput.value = '';
+      await updateApiKeyStatus();
+      updateApiKeyCharCount();
+    } else {
+      showModalMessage(`Error deleting API key: ${result.error}`, 'error');
+    }
+  } catch (error) {
+    showModalMessage(`Error deleting API key: ${error.message}`, 'error');
+  }
+}
+
+// API Key event listeners
+apiKeyInput.addEventListener('input', () => {
+  updateApiKeyCharCount();
+});
+
+toggleVisibilityBtn.addEventListener('click', () => {
+  toggleApiKeyVisibility();
+});
+
+saveApiKeyBtn.addEventListener('click', () => {
+  saveApiKey();
+});
+
+deleteApiKeyBtn.addEventListener('click', () => {
+  deleteApiKey();
 });

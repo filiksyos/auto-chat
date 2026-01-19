@@ -160,6 +160,7 @@ const scanInterval = setInterval(() => {
     inputElement = findGeminiInput(rawElement);
     if (inputElement) {
       console.log('[Gemini] Found input element');
+      ipcRenderer.send('input-ready');
       clearInterval(scanInterval);
     }
   }

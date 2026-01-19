@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Auto Chat</title>
+    <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+    <div class="main-container">
+        <h1 class="welcome-heading">Welcome to Auto Chat</h1>
+        <p class="subtitle">Type your message and it will be automatically routed to the best AI service for your needs</p>
+
+        <textarea
+            id="message-input"
+            class="message-input"
+            placeholder="Type your message and let AI route it to the best service..."
+            rows="4"
+        ></textarea>
+
+        <div id="api-key-section" class="api-key-section">
+            <label for="api-key-input" class="api-key-label">OpenRouter API Key (Optional)</label>
+            <input
+                type="password"
+                id="api-key-input"
+                class="api-key-input"
+                placeholder="sk-or-v1-..."
+            />
+            <p class="helper-text">
+                Enter your OpenRouter API key for intelligent routing. Leave empty to use ChatGPT by default.
+                <br>
+                <a href="https://openrouter.ai/keys" target="_blank" class="api-key-link">Get your API key here</a>
+            </p>
+        </div>
+
+        <div id="loading-indicator" class="loading-indicator hidden">
+            <span>Routing your message...</span>
+        </div>
+    </div>
+
+    <script src="landing.js"></script>
+</body>
+</html>

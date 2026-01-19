@@ -57,6 +57,35 @@
             <span class="prompt-hint">The prompt must include instructions for selecting between chatgpt, claude, gemini, perplexity, grok, lechat, and lumo</span>
           </div>
         </div>
+
+        <!-- API Key Management Section -->
+        <div class="api-key-section">
+          <h3>OpenRouter API Key</h3>
+          <p class="modal-description">
+            Your API key is used for AI routing and is stored securely using system encryption.
+          </p>
+          <div id="apiKeyStatus" class="api-key-status missing">⚠ No API Key</div>
+
+          <div class="api-key-input-group">
+            <input
+              type="password"
+              id="apiKeyInput"
+              class="api-key-input"
+              placeholder="sk-or-v1-..."
+              spellcheck="false"
+            />
+            <button id="toggleVisibilityBtn" class="toggle-visibility-btn">👁 Show</button>
+          </div>
+
+          <div class="prompt-info">
+            <span id="apiKeyCharCount" class="char-count">0 characters</span>
+          </div>
+
+          <div class="api-key-buttons">
+            <button id="saveApiKeyBtn" class="api-key-btn api-key-btn-save">Save API Key</button>
+            <button id="deleteApiKeyBtn" class="api-key-btn api-key-btn-delete">Delete API Key</button>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button id="resetPromptBtn" class="modal-btn modal-btn-secondary" title="Reset to default prompt">Reset to Default</button>

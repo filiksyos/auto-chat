@@ -79,6 +79,7 @@ const scanInterval = setInterval(() => {
     inputElement = findElement(inputSelectors);
     if (inputElement) {
       console.log('[Claude] Found input element');
+      ipcRenderer.send('input-ready');
       clearInterval(scanInterval);
     }
   }

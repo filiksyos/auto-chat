@@ -93,6 +93,7 @@ const scanInterval = setInterval(() => {
     inputElement = findElement(inputSelectors);
     if (inputElement) {
       console.log('[Grok] Found input element');
+      ipcRenderer.send('input-ready');
       clearInterval(scanInterval);
     }
   }

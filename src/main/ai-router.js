@@ -1,6 +1,35 @@
 const axios = require('axios');
 require('dotenv').config();
 const configManager = require('./config-manager');
+const { app, safeStorage } = require('electron');
+const fs = require('fs');
+const path = require('path');
+
+/**
+ * Get API key from secure storage or environment variable
+ * @returns {string|null} API key or null if not found
+ */
+function getApiKey() {
+  try {
+    // Try to read encrypted file from secure storage
+    const encryptedPath = path.join(app.getPath('userData'), 'api-key.enc');
+
+    if (fs.existsSync(encryptedPath)) {
+      const encryptedBuffer = fs.readFileSync(encryptedPath);
+      const decryptedKey = safeStorage.decryptString(encryptedBuffer);
+      return decryptedKey;
+    }
+  } catch (error) {
+    console.error('Error reading API key from secure storage:', error);
+  }
+
+  // Fallback to environment variable
+  if (process.env.OPENROUTER_API_KEY) {
+    return process.env.OPENROUTER_API_KEY;
+  }
+
+  return null;
+}
 
 /**
  * Select the best AI service for a given message
@@ -8,10 +37,10 @@ const configManager = require('./config-manager');
  * @returns {Promise<{service: string, reason: string}>}
  */
 async function selectAIService(message) {
-  const apiKey = process.env.OPENROUTER_API_KEY;
-  
+  const apiKey = getApiKey();
+
   if (!apiKey) {
-    console.warn('OPENROUTER_API_KEY not found, defaulting to ChatGPT');
+    console.warn('API key not found in secure storage or environment variables, defaulting to ChatGPT');
     return {
       service: 'chatgpt',
       reason: 'Default service (API key not configured)'
