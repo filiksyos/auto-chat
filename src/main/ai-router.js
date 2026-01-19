@@ -90,6 +90,15 @@ async function selectAIService(message) {
       throw new Error('Invalid response format from AI router');
     }
 
+    // Normalize service name (handle variations like "le chat" -> "lechat")
+    const serviceNormalizations = {
+      'le chat': 'lechat',
+      'le-chat': 'lechat'
+    };
+    if (serviceNormalizations[result.service]) {
+      result.service = serviceNormalizations[result.service];
+    }
+    
     // Validate service
     const validServices = ['chatgpt', 'claude', 'gemini', 'perplexity', 'grok', 'lechat', 'lumo'];
     if (!validServices.includes(result.service)) {

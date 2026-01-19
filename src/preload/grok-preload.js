@@ -47,16 +47,32 @@ function submitMessage() {
   console.log('[Grok] submitMessage');
   // Grok uses Enter key to submit, no submit button
   if (inputElement) {
-    const enterEvent = new KeyboardEvent('keydown', {
+    inputElement.focus();
+    inputElement.dispatchEvent(new KeyboardEvent('keydown', {
       key: 'Enter',
       code: 'Enter',
       keyCode: 13,
       which: 13,
       bubbles: true,
       cancelable: true
-    });
-    inputElement.dispatchEvent(enterEvent);
-    console.log('[Grok] Dispatched Enter key event');
+    }));
+    inputElement.dispatchEvent(new KeyboardEvent('keypress', {
+      key: 'Enter',
+      code: 'Enter',
+      keyCode: 13,
+      which: 13,
+      bubbles: true,
+      cancelable: true
+    }));
+    inputElement.dispatchEvent(new KeyboardEvent('keyup', {
+      key: 'Enter',
+      code: 'Enter',
+      keyCode: 13,
+      which: 13,
+      bubbles: true,
+      cancelable: true
+    }));
+    console.log('[Grok] Dispatched Enter key events');
   } else {
     console.error('[Grok] Input element not found for Enter key');
   }

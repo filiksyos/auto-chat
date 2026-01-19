@@ -48,16 +48,32 @@ function submitMessage() {
   console.log('[LeChat] submitMessage');
   // Le Chat uses Enter key to submit, no submit button
   if (inputElement) {
-    const enterEvent = new KeyboardEvent('keydown', {
+    inputElement.focus();
+    inputElement.dispatchEvent(new KeyboardEvent('keydown', {
       key: 'Enter',
       code: 'Enter',
       keyCode: 13,
       which: 13,
       bubbles: true,
       cancelable: true
-    });
-    inputElement.dispatchEvent(enterEvent);
-    console.log('[LeChat] Dispatched Enter key event');
+    }));
+    inputElement.dispatchEvent(new KeyboardEvent('keypress', {
+      key: 'Enter',
+      code: 'Enter',
+      keyCode: 13,
+      which: 13,
+      bubbles: true,
+      cancelable: true
+    }));
+    inputElement.dispatchEvent(new KeyboardEvent('keyup', {
+      key: 'Enter',
+      code: 'Enter',
+      keyCode: 13,
+      which: 13,
+      bubbles: true,
+      cancelable: true
+    }));
+    console.log('[LeChat] Dispatched Enter key events');
   } else {
     console.error('[LeChat] Input element not found for Enter key');
   }

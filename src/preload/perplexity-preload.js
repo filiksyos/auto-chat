@@ -127,16 +127,35 @@ function injectText(text) {
 
 function submitMessage() {
   console.log('[Perplexity] submitMessage');
+  // Refresh inputElement to ensure we have a fresh reference
+  inputElement = findElement(inputSelectors);
+  
+  if (!inputElement) {
+    console.error('[Perplexity] Input element not found');
+    return;
+  }
+  
+  // Ensure input is focused and has content
+  inputElement.focus();
+  
+  // Trigger input event to ensure Perplexity knows there's content
+  // This is important for contentEditable elements
+  if (inputElement.contentEditable === 'true') {
+    inputElement.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+  
+  // Refresh submit button after ensuring input is ready
   const submitBtn = findElement(submitSelectors);
   console.log('[Perplexity] Submit button found:', !!submitBtn);
   
-  if (submitBtn) {
+  // Check if submit button exists and is not disabled
+  if (submitBtn && !submitBtn.disabled && submitBtn.getAttribute('aria-disabled') !== 'true') {
     console.log('[Perplexity] Clicking submit button');
     submitBtn.focus();
     submitBtn.click();
     // Also try dispatching mouse events
     submitBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-  } else if (inputElement) {
+  } else {
     console.log('[Perplexity] No submit button, trying Enter key');
     inputElement.focus();
     inputElement.dispatchEvent(new KeyboardEvent('keydown', {
@@ -163,8 +182,6 @@ function submitMessage() {
       bubbles: true,
       cancelable: true
     }));
-  } else {
-    console.error('[Perplexity] No input element or submit button found');
   }
 }
 
