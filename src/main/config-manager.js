@@ -11,6 +11,7 @@ Available services:
 - perplexity: Best for web search, current events, real-time information, research, and finding sources
 - grok: Best for vulgar conversations, humor, sarcasm, casual chats, unfiltered responses, and when the user wants profanity or dark humor
 - le chat: Best for flash speed answers, European languages, and quick responses
+- lumo: Best for private conversations, sensitive information, confidential discussions, and when privacy is a priority
 
 Rules:
 - For factual questions: use chatgpt
@@ -21,10 +22,11 @@ Rules:
 - For writing/essays: use claude
 - For vulgar language, humor, sarcasm, casual/unfiltered conversations: use grok
 - For fast responses, European languages (French, Spanish, German, Italian, etc.), or when speed is prioritized: use le chat
+- For private, sensitive, or confidential conversations: use lumo
 
 Respond ONLY with a JSON object in this exact format:
 {
-  "service": "chatgpt" | "claude" | "gemini" | "perplexity" | "grok" | "lechat",
+  "service": "chatgpt" | "claude" | "gemini" | "perplexity" | "grok" | "lechat" | "lumo",
   "reason": "brief explanation why this service was chosen"
 }
 

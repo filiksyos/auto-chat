@@ -25,6 +25,10 @@ const SERVICES = {
   lechat: {
     url: 'https://chat.mistral.ai/chat',
     preload: 'lechat-preload.js'
+  },
+  lumo: {
+    url: 'https://lumo.proton.me',
+    preload: 'lumo-preload.js'
   }
 };
 

@@ -102,6 +102,27 @@
       "a[href]",
       "a"
     ]
+  },
+  "lumo": {
+    "input": [
+      "body > div.app-root > div.relative.reset4print.flex.flex-row.h-full.w-full.overflow-hidden > div > div > div > main > div > div > div.composer-container.md\\:px-4.w-full > div > section > div > div.lumo-input.flex-grow.w-full.z-30.flex.flex-row.flex-nowrap.items-center.gap-3.p-2.pl-3.min-h-custom.my-auto.border.border-weak.bg-norm.relative > div > div > p",
+      "p[contenteditable='true']",
+      "div[contenteditable='true']",
+      "[contenteditable='true']",
+      ".lumo-input p"
+    ],
+    "submit": [
+      "body > div.app-root > div.relative.reset4print.flex.flex-row.h-full.w-full.overflow-hidden > div > div > div > main > div > div > div.composer-container.md\\:px-4.w-full > div > section > div > div.lumo-input.flex-grow.w-full.z-30.flex.flex-row.flex-nowrap.items-center.gap-3.p-2.pl-3.min-h-custom.my-auto.border.border-weak.bg-norm.relative > div.flex.flex-row.self-end.items-end.gap-1.h-full.shrink-0.composer-submit-button > button > img",
+      ".composer-submit-button button",
+      "button[type='submit']",
+      "button img[alt*='send']"
+    ],
+    "newChat": [
+      "body > div.app-root > div.relative.reset4print.flex.flex-row.h-full.w-full.overflow-hidden > div > div > div > div > div > div:nth-child(2) > button > div",
+      "button[aria-label*='New']",
+      "button[title*='New chat']",
+      "div[role='button']"
+    ]
   }
 }
 
