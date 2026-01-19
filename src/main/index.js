@@ -124,9 +124,8 @@ app.on('ready', async () => {
       await new Promise(resolve => setTimeout(resolve, 200));
       mainWindow.chatView.webContents.send('submit-message');
 
-      // 9. Return to landing page after delay to allow message submission
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      windowManager.showLandingPage(mainWindow);
+      // 9. Stay on the service page (ChatGPT/Grok) after message submission
+      // User can continue interacting with the AI service
 
       // Clean up
       mainWindow.inputReadyResolver = null;
