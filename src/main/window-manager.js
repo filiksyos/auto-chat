@@ -20,7 +20,7 @@ const SERVICES = {
   }
 };
 
-const CONTROL_BAR_HEIGHT = 120;
+const CONTROL_BAR_HEIGHT = 90;
 
 async function createWindow() {
   const mainWindow = new BrowserWindow({

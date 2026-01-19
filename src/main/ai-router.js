@@ -1,29 +1,6 @@
 const axios = require('axios');
 require('dotenv').config();
-
-const ROUTING_RULES = `You are an AI service router. Analyze the user's request and determine which AI service is best suited to handle it.
-
-Available services:
-- chatgpt: Best for general questions, facts, explanations, coding help, math, and structured information
-- claude: Best for creative writing, long-form content, analysis, brainstorming, and nuanced discussions
-- gemini: Best for image generation, visual content, multimodal tasks, and Google-related queries
-- perplexity: Best for web search, current events, real-time information, research, and finding sources
-
-Rules:
-- For factual questions: use chatgpt
-- For creative tasks: use claude
-- For image/visual requests: use gemini
-- For web search/current events: use perplexity
-- For coding/technical: use chatgpt
-- For writing/essays: use claude
-
-Respond ONLY with a JSON object in this exact format:
-{
-  "service": "chatgpt" | "claude" | "gemini" | "perplexity",
-  "reason": "brief explanation why this service was chosen"
-}
-
-Do not include any other text, markdown formatting, or code blocks. Only output the raw JSON object.`;
+const configManager = require('./config-manager');
 
 /**
  * Select the best AI service for a given message
@@ -42,6 +19,9 @@ async function selectAIService(message) {
   }
 
   try {
+    // Load system prompt from config (custom or default)
+    const routingRules = configManager.loadSystemPrompt();
+    
     const response = await axios.post(
       'https://openrouter.ai/api/v1/chat/completions',
       {
@@ -49,7 +29,7 @@ async function selectAIService(message) {
         messages: [
           {
             role: 'system',
-            content: ROUTING_RULES
+            content: routingRules
           },
           {
             role: 'user',

@@ -8,30 +8,61 @@
 </head>
 <body>
   <div class="container">
-    <div class="service-selector">
-      <button class="service-btn active" data-service="chatgpt" title="ChatGPT - General Q&A & Facts">💬 ChatGPT</button>
-      <button class="service-btn" data-service="claude" title="Claude - Creative & Analysis">🎭 Claude</button>
-      <button class="service-btn" data-service="gemini" title="Gemini - Images & Multimodal">✨ Gemini</button>
-      <button class="service-btn" data-service="perplexity" title="Perplexity - Web Search">🔍 Perplexity</button>
+    <div class="top-bar">
+      <div class="service-selector">
+        <button class="service-btn active" data-service="chatgpt" title="ChatGPT - General Q&A & Facts">💬 ChatGPT</button>
+        <button class="service-btn" data-service="claude" title="Claude - Creative & Analysis">🎭 Claude</button>
+        <button class="service-btn" data-service="gemini" title="Gemini - Images & Multimodal">✨ Gemini</button>
+        <button class="service-btn" data-service="perplexity" title="Perplexity - Web Search">🔍 Perplexity</button>
+      </div>
+      <button id="settingsBtn" class="settings-icon-btn" title="Settings">⚙️</button>
     </div>
     
-    <div class="input-wrapper">
-      <textarea
+    <div class="input-row">
+      <input
+        type="text"
         id="textInput"
         class="text-input"
-        placeholder="Type your message... Auto Chat will intelligently route it to the best AI service!"
+        placeholder="Type your message... Auto Chat will route it to the best AI!"
         spellcheck="true"
-      ></textarea>
-      <div class="input-info">
-        <div class="routing-info">
-          <span id="routingStatus" class="routing-status">🤖 Auto-routing enabled</span>
-        </div>
-        <span class="shortcuts"><kbd>Enter</kbd> to submit | <kbd>Shift+Enter</kbd> for new line</span>
-        <div class="button-group">
-          <button id="newChatBtn" class="action-btn" title="Start new chat">✨ New Chat</button>
-          <button id="refreshBtn" class="action-btn" title="Refresh page">🔄 Refresh</button>
+      />
+      <span id="routingStatus" class="routing-status">🤖 Ready</span>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settingsModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>⚙️ System Prompt Settings</h2>
+        <button id="closeModalBtn" class="modal-close" title="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-description">
+          Customize the AI routing system prompt to control when each service (ChatGPT, Gemini, Claude, Perplexity) should be used.
+        </p>
+        <div class="prompt-editor">
+          <label for="promptTextarea">System Prompt:</label>
+          <textarea
+            id="promptTextarea"
+            class="prompt-textarea"
+            placeholder="Enter your custom system prompt here..."
+            spellcheck="false"
+          ></textarea>
+          <div class="prompt-info">
+            <span id="charCount" class="char-count">0 characters</span>
+            <span class="prompt-hint">The prompt must include instructions for selecting between chatgpt, claude, gemini, and perplexity</span>
+          </div>
         </div>
       </div>
+      <div class="modal-footer">
+        <button id="resetPromptBtn" class="modal-btn modal-btn-secondary" title="Reset to default prompt">Reset to Default</button>
+        <div class="modal-footer-right">
+          <button id="cancelModalBtn" class="modal-btn modal-btn-secondary">Cancel</button>
+          <button id="savePromptBtn" class="modal-btn modal-btn-primary">Save</button>
+        </div>
+      </div>
+      <div id="modalMessage" class="modal-message"></div>
     </div>
   </div>
 

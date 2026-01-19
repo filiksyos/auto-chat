@@ -1,6 +1,7 @@
 const { app, ipcMain } = require('electron');
 const windowManager = require('./window-manager');
 const { selectAIService } = require('./ai-router');
+const configManager = require('./config-manager');
 
 let mainWindow;
 let currentService = 'chatgpt';
@@ -114,6 +115,102 @@ app.on('ready', async () => {
   ipcMain.handle('selector-error', (event, service, error) => {
     console.error(`[${service}] Selector error:`, error);
     return true;
+  });
+
+  // Handle get system prompt
+  ipcMain.handle('get-system-prompt', async (event) => {
+    try {
+      const prompt = configManager.loadSystemPrompt();
+      return {
+        success: true,
+        prompt: prompt
+      };
+    } catch (error) {
+      console.error('Error getting system prompt:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  });
+
+  // Handle save system prompt
+  ipcMain.handle('save-system-prompt', async (event, prompt) => {
+    try {
+      await configManager.saveSystemPrompt(prompt);
+      return {
+        success: true
+      };
+    } catch (error) {
+      console.error('Error saving system prompt:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  });
+
+  // Handle reset system prompt
+  ipcMain.handle('reset-system-prompt', async (event) => {
+    try {
+      await configManager.resetSystemPrompt();
+      return {
+        success: true
+      };
+    } catch (error) {
+      console.error('Error resetting system prompt:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  });
+
+  // Handle show/hide chat view (for modal overlay)
+  ipcMain.handle('set-chat-view-visible', async (event, visible) => {
+    try {
+      const bounds = mainWindow.getContentBounds();
+      
+      if (visible) {
+        // Restore control bar to normal height
+        if (mainWindow.controlView) {
+          mainWindow.controlView.setBounds({
+            x: 0,
+            y: 0,
+            width: bounds.width,
+            height: 90 // CONTROL_BAR_HEIGHT
+          });
+        }
+        // Show the chat view
+        if (mainWindow.chatView) {
+          mainWindow.addBrowserView(mainWindow.chatView);
+          mainWindow.chatView.setBounds({
+            x: 0,
+            y: 90, // CONTROL_BAR_HEIGHT
+            width: bounds.width,
+            height: bounds.height - 90
+          });
+        }
+      } else {
+        // Hide the chat view by removing it from the window
+        if (mainWindow.chatView) {
+          mainWindow.removeBrowserView(mainWindow.chatView);
+        }
+        // Expand control bar to full window height for modal
+        if (mainWindow.controlView) {
+          mainWindow.controlView.setBounds({
+            x: 0,
+            y: 0,
+            width: bounds.width,
+            height: bounds.height
+          });
+        }
+      }
+      return { success: true };
+    } catch (error) {
+      console.error('Error setting chat view visibility:', error);
+      return { success: false, error: error.message };
+    }
   });
 });
 

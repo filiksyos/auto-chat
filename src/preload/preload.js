@@ -37,5 +37,17 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Listen for new chat
   onNewChat: (callback) => {
     ipcRenderer.on('new-chat', () => callback());
-  }
+  },
+  
+  // Get system prompt
+  getSystemPrompt: () => ipcRenderer.invoke('get-system-prompt'),
+  
+  // Save system prompt
+  saveSystemPrompt: (prompt) => ipcRenderer.invoke('save-system-prompt', prompt),
+  
+  // Reset system prompt to default
+  resetSystemPrompt: () => ipcRenderer.invoke('reset-system-prompt'),
+  
+  // Show/hide chat view (for modal overlay)
+  setChatViewVisible: (visible) => ipcRenderer.invoke('set-chat-view-visible', visible)
 });
