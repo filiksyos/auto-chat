@@ -17,6 +17,10 @@ const SERVICES = {
   perplexity: {
     url: 'https://www.perplexity.ai',
     preload: 'perplexity-preload.js'
+  },
+  grok: {
+    url: 'https://grok.com',
+    preload: 'grok-preload.js'
   }
 };
 

@@ -73,6 +73,20 @@
       "a[aria-label*='New']",
       "button[title*='New chat']"
     ]
+  },
+  "grok": {
+    "input": [
+      "p[contenteditable='true']",
+      "div[contenteditable='true']",
+      "[contenteditable='true']",
+      "form p[contenteditable]"
+    ],
+    "submit": [],
+    "newChat": [
+      "span > a",
+      "a[href]",
+      "a"
+    ]
   }
 }
 
