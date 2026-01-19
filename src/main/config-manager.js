@@ -9,6 +9,7 @@ Available services:
 - claude: Best for creative writing, long-form content, analysis, brainstorming, and nuanced discussions
 - gemini: Best for image generation, visual content, multimodal tasks, and Google-related queries
 - perplexity: Best for web search, current events, real-time information, research, and finding sources
+- grok: Best for vulgar conversations, humor, sarcasm, casual chats, unfiltered responses, and when the user wants profanity or dark humor
 
 Rules:
 - For factual questions: use chatgpt
@@ -17,10 +18,11 @@ Rules:
 - For web search/current events: use perplexity
 - For coding/technical: use chatgpt
 - For writing/essays: use claude
+- For vulgar language, humor, sarcasm, casual/unfiltered conversations: use grok
 
 Respond ONLY with a JSON object in this exact format:
 {
-  "service": "chatgpt" | "claude" | "gemini" | "perplexity",
+  "service": "chatgpt" | "claude" | "gemini" | "perplexity" | "grok",
   "reason": "brief explanation why this service was chosen"
 }
 
