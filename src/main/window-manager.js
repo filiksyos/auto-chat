@@ -21,6 +21,10 @@ const SERVICES = {
   grok: {
     url: 'https://grok.com',
     preload: 'grok-preload.js'
+  },
+  lechat: {
+    url: 'https://chat.mistral.ai/chat',
+    preload: 'lechat-preload.js'
   }
 };
 

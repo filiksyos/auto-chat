@@ -87,6 +87,21 @@
       "a[href]",
       "a"
     ]
+  },
+  "lechat": {
+    "input": [
+      "body > main > div > div.relative.flex.h-full.w-full.justify-start.overflow-hidden > div > main > div > div > div > div > div.relative.flex.h-full.w-full.flex-1.flex-col.items-center.justify-center > div.absolute.flex.w-full.max-w-\(--breakpoint-md\).flex-col.px-2 > div > form > div > div > div.relative.overflow-hidden.mb-5.min-h-10.w-full > div > div > div > div > div > p",
+      "p[contenteditable='true']",
+      "div[contenteditable='true']",
+      "[contenteditable='true']",
+      "form p[contenteditable]"
+    ],
+    "submit": [],
+    "newChat": [
+      "body > main > div > div.relative.flex.h-full.w-full.justify-start.overflow-hidden > div > main > div > div > div > div > div.left-0.right-0.top-0.z-20.flex.w-full.flex-row.items-center.justify-between.transition-shadow.desktop-mac\\:pt-8.desktop-mac\\:drag > div.flex-row.p-3.flex.items-center.gap-4.ps-6.pt-3.desktop-mac\\:no-drag > a",
+      "a[href]",
+      "a"
+    ]
   }
 }
 

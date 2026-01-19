@@ -62,7 +62,7 @@ async function selectAIService(message) {
     }
 
     // Validate service
-    const validServices = ['chatgpt', 'claude', 'gemini', 'perplexity', 'grok'];
+    const validServices = ['chatgpt', 'claude', 'gemini', 'perplexity', 'grok', 'lechat'];
     if (!validServices.includes(result.service)) {
       console.error('Invalid service selected:', result.service);
       return {
