@@ -12,6 +12,7 @@ Available services:
 - grok: Best for vulgar conversations, humor, sarcasm, casual chats, unfiltered responses, and when the user wants profanity or dark humor
 - le chat: Best for flash speed answers, European languages, and quick responses
 - lumo: Best for private conversations, sensitive information, confidential discussions, and when privacy is a priority
+- qwen: Best for Chinese language conversations, multilingual tasks, and general Q&A in Chinese or mixed languages
 
 Rules:
 - For factual questions: use chatgpt
@@ -23,10 +24,11 @@ Rules:
 - For vulgar language, humor, sarcasm, casual/unfiltered conversations: use grok
 - For fast responses, European languages (French, Spanish, German, Italian, etc.), or when speed is prioritized: use le chat
 - For private, sensitive, or confidential conversations: use lumo
+- For Chinese language conversations, Chinese text, multilingual tasks involving Chinese, or when the user writes in Chinese: use qwen
 
 Respond ONLY with a JSON object in this exact format:
 {
-  "service": "chatgpt" | "claude" | "gemini" | "perplexity" | "grok" | "lechat" | "lumo",
+  "service": "chatgpt" | "claude" | "gemini" | "perplexity" | "grok" | "lechat" | "lumo" | "qwen",
   "reason": "brief explanation why this service was chosen"
 }
 

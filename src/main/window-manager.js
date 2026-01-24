@@ -29,6 +29,10 @@ const SERVICES = {
   lumo: {
     url: 'https://lumo.proton.me',
     preload: 'lumo-preload.js'
+  },
+  qwen: {
+    url: 'https://chat.qwen.ai',
+    preload: 'qwen-preload.js'
   }
 };
 

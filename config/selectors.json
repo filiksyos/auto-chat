@@ -123,6 +123,26 @@
       "button[title*='New chat']",
       "div[role='button']"
     ]
+  },
+  "qwen": {
+    "input": [
+      "#chat-input",
+      "div[contenteditable='true']",
+      "[contenteditable='true']",
+      "textarea"
+    ],
+    "submit": [
+      "#chat-message-input > div.chat-message-input-container-inner > div > div > div.prompt-input-container > div.prompt-input-action-bar > div.chat-prompt-send-button > button",
+      "div.chat-prompt-send-button > button",
+      "button[aria-label*='Send']",
+      "button[type='submit']"
+    ],
+    "newChat": [
+      "#sidebar > div > div.sidebar-entry-list > div.sidebar-entry-list-content",
+      "button[aria-label*='New']",
+      "button[title*='New chat']",
+      "div[role='button']"
+    ]
   }
 }
 
